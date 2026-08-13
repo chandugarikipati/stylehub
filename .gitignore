@@ -1,13 +1,76 @@
+# ==============================
+# Dependencies
+# ==============================
 node_modules/
+
+
+# ==============================
+# Environment variables / secrets
+# ==============================
+.env
+.env.*
+!.env.example
+
+
+# ==============================
+# Build output
+# ==============================
 dist/
 build/
-.cache/
-.env*
+
+
+# ==============================
+# Vite
+# ==============================
 .vite/
 vite.config.*.timestamp-*
-*.tsbuildinfo
-*-debug.log*
-logs/
+
+
+# ==============================
+# Logs
+# ==============================
 *.log
-.claude-replay.*
+logs/
+*-debug.log*
+
+
+# ==============================
+# Cache / temporary files
+# ==============================
+.cache/
 .tmp-*
+*.tsbuildinfo
+
+
+# ==============================
+# IDE / Editor
+# ==============================
+.vscode/
+.idea/
+
+
+# ==============================
+# Operating system
+# ==============================
+.DS_Store
+Thumbs.db
+
+
+# ==============================
+# Claude / AI tooling
+# ==============================
+.claude-replay.*
+
+
+# ==============================
+# Figma Make local files
+# ==============================
+.figma/
+
+
+# ==============================
+# Local development files
+# ==============================
+*.local
+# Backup frontend
+frontend-backup/
