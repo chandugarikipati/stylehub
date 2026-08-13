@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import type { Product } from "../data/products";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
 
 const categories = [
   {

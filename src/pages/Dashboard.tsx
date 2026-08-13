@@ -11,6 +11,8 @@ type Tab =
   | "addresses"
   | "profile";
 
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+
 interface SavedAddress {
   _id: string;
   userId: string;
@@ -152,7 +154,7 @@ export default function Dashboard() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/users/${user.id}/addresses`
+          `${API_URL}/users/${user.id}/addresses`
         );
 
         const data = await response.json();
@@ -354,7 +356,7 @@ export default function Dashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/addresses/${address._id}`,
+        `${API_URL}/addresses/${address._id}`,
         {
           method: "DELETE",
         }

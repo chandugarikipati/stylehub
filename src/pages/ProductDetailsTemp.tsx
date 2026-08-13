@@ -13,6 +13,8 @@ import type { Product } from "../data/products";
 
 import { useApp } from "../context/AppContext";
 
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+
 type Review = {
   _id?: string;
   id?: string;
@@ -93,7 +95,7 @@ export default function ProductDetailsTemp() {
         console.log("Fetching product:", id);
 
         const response = await fetch(
-          `http://localhost:5000/api/products/${id}`
+          `${API_URL}/products/${id}`
         );
 
         console.log(

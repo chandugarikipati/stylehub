@@ -10,6 +10,8 @@ import {
 
 import type { Product } from "../data/products";
 
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+
 // =====================================================
 // TYPES
 // =====================================================
@@ -830,7 +832,7 @@ export function AppProvider({
       try {
         const response =
           await fetch(
-            "http://localhost:5000/api/users/login",
+            `${API_URL}/users/login`,
             {
               method: "POST",
               headers: {
@@ -942,7 +944,7 @@ export function AppProvider({
         try {
           const response =
             await fetch(
-              "http://localhost:5000/api/users/google-login",
+              `${API_URL}/users/google-login`,
               {
                 method: "POST",
                 headers: {

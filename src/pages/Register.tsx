@@ -28,6 +28,8 @@ declare global {
   }
 }
 
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+
 const GOOGLE_CLIENT_ID = import.meta.env
   .VITE_GOOGLE_CLIENT_ID as string | undefined;
 
@@ -281,7 +283,7 @@ export default function Register() {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/users/register",
+        `${API_URL}/users/register`,
         {
           method: "POST",
 

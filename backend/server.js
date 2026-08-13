@@ -11,6 +11,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // =====================================================
 // MIDDLEWARE
@@ -18,7 +19,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(
   cors({
-    origin: true,
+    origin: FRONTEND_URL || true,
     credentials: true,
   })
 );

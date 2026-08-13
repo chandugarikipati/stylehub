@@ -53,8 +53,7 @@ interface AddressForm {
   pincode: string;
 }
 
-const API_BASE_URL =
-  "http://localhost:5000";
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
 
 // =====================================================
 // COMPONENT
@@ -242,7 +241,7 @@ export default function Checkout() {
           );
 
           const url =
-            `${API_BASE_URL}/api/users/${user.id}/addresses`;
+            `${API_BASE_URL}/users/${user.id}/addresses`;
 
           console.log(
             "GET ADDRESSES:",
@@ -811,7 +810,7 @@ export default function Checkout() {
         );
 
         const url =
-          `${API_BASE_URL}/api/users/${user.id}/addresses`;
+          `${API_BASE_URL}/users/${user.id}/addresses`;
 
         console.log(
           "POST URL:",

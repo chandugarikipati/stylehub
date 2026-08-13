@@ -1,64 +1,86 @@
-import type { Product } from "../data/products";
+const API_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+).replace(/\/$/, "");
 
-const API_URL = "http://localhost:5000/api";
-
-export async function getProducts(): Promise<Product[]> {
-  const response = await fetch(
-    `${API_URL}/products`
-  );
-
-  const data = await response.json();
-
-  console.log(
-    "📦 Products API response:",
-    data
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      data?.message ||
-        `Failed to fetch products: ${response.status}`
-    );
-  }
-
-  if (Array.isArray(data)) {
-    return data as Product[];
-  }
-
-  if (Array.isArray(data.products)) {
-    return data.products as Product[];
-  }
-
-  return [];
+export interface Product {
+  _id?: string;
+  id?: string;
+  name: string;
+  description?: string;
+  price: number;
+  image?: string;
+  images?: string[];
+  category?: string;
+  brand?: string;
+  stock?: number;
+  rating?: number;
+  reviews?: number;
+  [key: string]: any;
 }
 
-export async function getProductById(
-  id: string
-): Promise<Product> {
-  const response = await fetch(
-    `${API_URL}/products/${encodeURIComponent(id)}`
-  );
-
-  const data = await response.json();
-
-  console.log(
-    "📦 Single product API response:",
-    data
-  );
+export const getProducts = async (): Promise<Product[]> => {
+  const response = await fetch(`${API_URL}/products`);
 
   if (!response.ok) {
-    throw new Error(
-      data?.message ||
-        `Failed to fetch product: ${response.status}`
-    );
+    throw new Error(`Failed to fetch products: ${response.status}`);
   }
 
-  // Backend response:
-  // { success: true, product: {...} }
+  return response.json();
+};
 
-  if (data?.product) {
-    return data.product as Product;
+export const getProduct = async (id: string): Promise<Product> => {
+  const response = await fetch(`${API_URL}/products/${id}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch product: ${response.status}`);
   }
 
-  return data as Product;
-}
+  return response.json();
+};
+
+export const createProduct = async (
+  product: Partial<Product>
+): Promise<Product> => {
+  const response = await fetch(`${API_URL}/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create product: ${response.status}`);
+  }
+
+  return response.json();
+};
+
+export const updateProduct = async (
+  id: string,
+  product: Partial<Product>
+): Promise<Product> => {
+  const response = await fetch(`${API_URL}/products/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update product: ${response.status}`);
+  }
+
+  return response.json();
+};
+
+export const deleteProduct = async (id: string): Promise<void> => {
+  const response = await fetch(`${API_URL}/products/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete product: ${response.status}`);
+  }
+};

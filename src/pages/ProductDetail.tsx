@@ -3,6 +3,8 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import type { Product } from "../data/products";
 
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+
 type MongoProduct = Product & {
   _id?: string;
 };
@@ -57,7 +59,7 @@ export default function ProductDetail() {
         );
 
         const response = await fetch(
-          `http://localhost:5000/api/products/${id}`
+          `${API_URL}/products/${id}`
         );
 
         const data = await response.json();
