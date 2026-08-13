@@ -350,19 +350,23 @@ app.get("/api/products", async (req, res) => {
     const normalizedProducts = products.map((product) => ({
       ...product,
       id: product.id || product._id?.toString(),
+
       images:
         Array.isArray(product.images) && product.images.length > 0
           ? product.images
           : product.image
           ? [product.image]
           : [],
+
       inStock: product.inStock !== false,
       stockCount: Number(product.stockCount || 0),
       discount: Number(product.discount || 0),
+
       reviewCount: Number(
         product.reviewCount ??
           (typeof product.reviews === "number" ? product.reviews : 0)
       ),
+
       reviews: Array.isArray(product.reviews) ? product.reviews : [],
     }));
 
@@ -409,21 +413,25 @@ app.get("/api/products/:id", async (req, res) => {
     const normalizedProduct = {
       ...product,
       id: product.id || product._id?.toString(),
+
       images:
         Array.isArray(product.images) && product.images.length > 0
           ? product.images
           : product.image
           ? [product.image]
           : [],
+
       inStock: product.inStock !== false,
       stockCount: Number(product.stockCount || 0),
       discount: Number(product.discount || 0),
+
       reviewCount: Number(
         product.reviewCount ??
           (typeof product.reviews === "number"
             ? product.reviews
             : 0)
       ),
+
       reviews: Array.isArray(product.reviews)
         ? product.reviews
         : [],
@@ -620,10 +628,12 @@ app.post("/api/users/google-login", async (req, res) => {
 
     const email = payload.email.trim().toLowerCase();
     const googleId = payload.sub;
+
     const name =
       payload.name ||
       payload.given_name ||
       "StyleHub User";
+
     const avatar = payload.picture || "";
 
     let user = await User.findOne({ email });
@@ -641,8 +651,10 @@ app.post("/api/users/google-login", async (req, res) => {
       console.log("✅ Google account created:", email);
     } else {
       user.googleId = googleId;
+
       if (avatar) user.avatar = avatar;
       if (!user.name) user.name = name;
+
       await user.save();
 
       console.log("✅ Google account logged in:", email);
@@ -975,8 +987,8 @@ app.use((error, req, res, next) => {
 // START SERVER
 // =====================================================
 
-app.listen(PORT, () => {
-  console.log(
-    `🚀 StyleHub backend running on http://localhost:${PORT}`
-  );
+// Render requires the server to listen on the assigned PORT
+// and be accessible externally through 0.0.0.0.
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 StyleHub backend running on port ${PORT}`);
 });
