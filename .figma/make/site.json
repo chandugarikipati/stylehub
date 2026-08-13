@@ -1,0 +1,10 @@
+{
+  "description": "Discover a premium clothing e-commerce platform offering a curated selection of stylish apparel for men, women, and kids, all in a luxurious shopping experience.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
