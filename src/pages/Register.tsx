@@ -9,7 +9,9 @@ declare global {
         id: {
           initialize: (config: {
             client_id: string;
-            callback: (response: { credential: string }) => void;
+            callback: (response: {
+              credential: string;
+            }) => void;
           }) => void;
 
           renderButton: (
@@ -28,13 +30,22 @@ declare global {
   }
 }
 
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+const API_URL = (
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 
-const GOOGLE_CLIENT_ID = import.meta.env
-  .VITE_GOOGLE_CLIENT_ID as string | undefined;
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID as
+    | string
+    | undefined;
 
 export default function Register() {
-  const { login, googleLogin, showToast } = useApp();
+  const {
+    login,
+    googleLogin,
+    showToast,
+  } = useApp();
 
   const navigate = useNavigate();
 
@@ -190,7 +201,11 @@ export default function Register() {
     return () => {
       script.onload = null;
     };
-  }, [googleLogin, navigate, showToast]);
+  }, [
+    googleLogin,
+    navigate,
+    showToast,
+  ]);
 
   // =====================================================
   // CREATE ACCOUNT
@@ -354,6 +369,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center p-4">
+
       <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden grid lg:grid-cols-2">
 
         {/* =================================================
@@ -391,13 +407,28 @@ export default function Register() {
                   key={benefit}
                   className="flex items-center gap-3"
                 >
-                  <span className="text-gold text-lg">
-                    âœ“
+
+                  {/* Use SVG instead of an emoji/symbol */}
+                  <span className="text-gold text-lg w-5 h-5 flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12.5l4 4L19 7" />
+                    </svg>
                   </span>
 
                   <span className="text-white/80 text-sm">
                     {benefit}
                   </span>
+
                 </div>
               ))}
 
