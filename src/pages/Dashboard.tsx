@@ -10,7 +10,10 @@ type Tab =
   | "addresses"
   | "profile";
 
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+const API_URL = (
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 
 interface SavedAddress {
   _id: string;
@@ -82,7 +85,9 @@ const membershipStyles: Record<
   },
 };
 
-function getMembershipLevel(orderCount: number): MembershipLevel {
+function getMembershipLevel(
+  orderCount: number
+): MembershipLevel {
   if (orderCount >= 10) {
     return "Premium";
   }
@@ -100,16 +105,21 @@ function getMembershipLevel(orderCount: number): MembershipLevel {
 
 function addOneYear(date: Date) {
   const result = new Date(date);
-  result.setFullYear(result.getFullYear() + 1);
+  result.setFullYear(
+    result.getFullYear() + 1
+  );
   return result;
 }
 
 function formatMembershipDate(date: string) {
-  return new Date(date).toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  return new Date(date).toLocaleDateString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }
+  );
 }
 
 export default function Dashboard() {
@@ -123,14 +133,14 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] =
+    useState<Tab>("overview");
 
   const [savedAddresses, setSavedAddresses] =
     useState<SavedAddresses>({});
 
   const [membership, setMembership] =
     useState<MembershipData | null>(null);
-
 
   // =====================================================
   // LOAD SAVED ADDRESSES FROM MONGODB
@@ -152,21 +162,24 @@ export default function Dashboard() {
 
         if (!response.ok) {
           throw new Error(
-            data?.message || "Failed to load saved addresses"
+            data?.message ||
+              "Failed to load saved addresses"
           );
         }
 
-        const addresses: SavedAddress[] = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.addresses)
-          ? data.addresses
-          : [];
+        const addresses: SavedAddress[] =
+          Array.isArray(data)
+            ? data
+            : Array.isArray(data?.addresses)
+            ? data.addresses
+            : [];
 
         const addressMap: SavedAddresses = {};
 
         addresses.forEach((address) => {
           if (address?.type) {
-            addressMap[address.type] = address;
+            addressMap[address.type] =
+              address;
           }
         });
 
@@ -189,11 +202,16 @@ export default function Dashboard() {
   // =====================================================
 
   useEffect(() => {
-    const currentLevel = getMembershipLevel(orders.length);
-    const storageKey = "stylehub_membership";
+    const currentLevel =
+      getMembershipLevel(orders.length);
+
+    const storageKey =
+      "stylehub_membership";
 
     try {
-      const stored = localStorage.getItem(storageKey);
+      const stored =
+        localStorage.getItem(storageKey);
+
       const now = new Date();
 
       // -------------------------------------------------
@@ -210,28 +228,35 @@ export default function Dashboard() {
 
         // Membership still active
         if (now < expiryDate) {
-          if (existing.level !== currentLevel) {
-            const levels: MembershipLevel[] = [
-              "Member",
-              "Silver",
-              "Gold",
-              "Premium",
-            ];
+          if (
+            existing.level !==
+            currentLevel
+          ) {
+            const levels: MembershipLevel[] =
+              [
+                "Member",
+                "Silver",
+                "Gold",
+                "Premium",
+              ];
 
-            const oldIndex = levels.indexOf(
-              existing.level
-            );
+            const oldIndex =
+              levels.indexOf(
+                existing.level
+              );
 
-            const newIndex = levels.indexOf(
-              currentLevel
-            );
+            const newIndex =
+              levels.indexOf(
+                currentLevel
+              );
 
             // Upgrade only
             if (newIndex > oldIndex) {
-              const updated: MembershipData = {
-                ...existing,
-                level: currentLevel,
-              };
+              const updated: MembershipData =
+                {
+                  ...existing,
+                  level: currentLevel,
+                };
 
               setMembership(updated);
 
@@ -254,13 +279,16 @@ export default function Dashboard() {
 
         const newStartDate = new Date();
 
-        const newMembership: MembershipData = {
-          level: currentLevel,
-          startedAt: newStartDate.toISOString(),
-          expiresAt: addOneYear(
-            newStartDate
-          ).toISOString(),
-        };
+        const newMembership: MembershipData =
+          {
+            level: currentLevel,
+            startedAt:
+              newStartDate.toISOString(),
+            expiresAt:
+              addOneYear(
+                newStartDate
+              ).toISOString(),
+          };
 
         setMembership(newMembership);
 
@@ -278,13 +306,16 @@ export default function Dashboard() {
 
       const startDate = new Date();
 
-      const newMembership: MembershipData = {
-        level: currentLevel,
-        startedAt: startDate.toISOString(),
-        expiresAt: addOneYear(
-          startDate
-        ).toISOString(),
-      };
+      const newMembership: MembershipData =
+        {
+          level: currentLevel,
+          startedAt:
+            startDate.toISOString(),
+          expiresAt:
+            addOneYear(
+              startDate
+            ).toISOString(),
+        };
 
       setMembership(newMembership);
 
@@ -327,21 +358,29 @@ export default function Dashboard() {
   // WISHLIST PRODUCTS
   // =====================================================
 
-  const wishlistProducts = wishlistIds
-    .map((id) =>
-      products.find((p) => p.id === id)
-    )
-    .filter(Boolean) as typeof products;
+  const wishlistProducts =
+    wishlistIds
+      .map((id) =>
+        products.find(
+          (p) => p.id === id
+        )
+      )
+      .filter(Boolean) as typeof products;
 
   // =====================================================
   // REMOVE ADDRESS FROM MONGODB
   // =====================================================
 
-  const removeAddress = async (type: string) => {
-    const address = savedAddresses[type];
+  const removeAddress = async (
+    type: string
+  ) => {
+    const address =
+      savedAddresses[type];
 
     if (!address?._id) {
-      console.error("Address ID is missing.");
+      console.error(
+        "Address ID is missing."
+      );
       return;
     }
 
@@ -353,21 +392,32 @@ export default function Dashboard() {
         }
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
-          data?.message || "Failed to delete address"
+          data?.message ||
+            "Failed to delete address"
         );
       }
 
-      setSavedAddresses((previous) => {
-        const updated = { ...previous };
-        delete updated[type];
-        return updated;
-      });
+      setSavedAddresses(
+        (previous) => {
+          const updated = {
+            ...previous,
+          };
+
+          delete updated[type];
+
+          return updated;
+        }
+      );
     } catch (error) {
-      console.error("Could not delete address:", error);
+      console.error(
+        "Could not delete address:",
+        error
+      );
     }
   };
 
@@ -413,9 +463,13 @@ export default function Dashboard() {
   const membershipStyle =
     membershipStyles[membershipLevel];
 
-  const membershipExpired = membership
-    ? new Date() > new Date(membership.expiresAt)
-    : false;
+  const membershipExpired =
+    membership
+      ? new Date() >
+        new Date(
+          membership.expiresAt
+        )
+      : false;
 
   // =====================================================
   // TABS
@@ -429,27 +483,27 @@ export default function Dashboard() {
     {
       id: "overview",
       label: "Overview",
-      icon: "âŠž",
+      icon: "⚙",
     },
     {
       id: "orders",
       label: "Orders",
-      icon: "ðŸ“¦",
+      icon: "📦",
     },
     {
       id: "wishlist",
       label: "Wishlist",
-      icon: "â™¡",
+      icon: "♡",
     },
     {
       id: "addresses",
       label: "Addresses",
-      icon: "ðŸ“",
+      icon: "📍",
     },
     {
       id: "profile",
       label: "Profile",
-      icon: "ðŸ‘¤",
+      icon: "👤",
     },
   ];
 
@@ -463,9 +517,9 @@ export default function Dashboard() {
 
         <div className="grid lg:grid-cols-4 gap-8">
 
-          {/* =====================================================
+          {/* =================================================
               SIDEBAR
-          ===================================================== */}
+          ================================================= */}
 
           <div className="lg:col-span-1">
 
@@ -497,14 +551,19 @@ export default function Dashboard() {
                 <button
                   key={t.id}
                   type="button"
-                  onClick={() => setTab(t.id)}
+                  onClick={() =>
+                    setTab(t.id)
+                  }
                   className={`flex items-center gap-3 w-full px-5 py-3.5 text-sm font-medium transition-colors border-l-2 ${
                     tab === t.id
                       ? "border-gold bg-gold/5 text-charcoal"
                       : "border-transparent text-charcoal-500 hover:bg-charcoal-50 hover:text-charcoal"
                   }`}
                 >
-                  <span>{t.icon}</span>
+                  <span>
+                    {t.icon}
+                  </span>
+
                   {t.label}
                 </button>
               ))}
@@ -517,7 +576,7 @@ export default function Dashboard() {
                 }}
                 className="flex items-center gap-3 w-full px-5 py-3.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-l-2 border-transparent"
               >
-                <span>â†’</span>
+                <span>→</span>
                 Sign Out
               </button>
 
@@ -525,22 +584,22 @@ export default function Dashboard() {
 
           </div>
 
-          {/* =====================================================
+          {/* =================================================
               MAIN CONTENT
-          ===================================================== */}
+          ================================================= */}
 
           <div className="lg:col-span-3">
 
-            {/* =====================================================
+            {/* =================================================
                 OVERVIEW
-            ===================================================== */}
+            ================================================= */}
 
             {tab === "overview" && (
               <div className="space-y-6">
 
                 <h2 className="font-display text-2xl font-bold text-charcoal">
                   Hello,{" "}
-                  {user.name.split(" ")[0]} ðŸ‘‹
+                  {user.name.split(" ")[0]} 👋
                 </h2>
 
                 {/* STAT CARDS */}
@@ -551,21 +610,23 @@ export default function Dashboard() {
                     {
                       label: "Total Orders",
                       value: orders.length,
-                      icon: "ðŸ“¦",
+                      icon: "📦",
                     },
                     {
                       label: "Wishlist Items",
-                      value: wishlistIds.length,
-                      icon: "â™¡",
+                      value:
+                        wishlistIds.length,
+                      icon: "♡",
                     },
                     {
                       label: "Cart Items",
-                      value: cartItems.reduce(
-                        (sum, item) =>
-                          sum + item.qty,
-                        0
-                      ),
-                      icon: "ðŸ›’",
+                      value:
+                        cartItems.reduce(
+                          (sum, item) =>
+                            sum + item.qty,
+                          0
+                        ),
+                      icon: "🛒",
                     },
                     {
                       label: "Saved Addresses",
@@ -573,7 +634,7 @@ export default function Dashboard() {
                         Object.keys(
                           savedAddresses
                         ).length,
-                      icon: "ðŸ“",
+                      icon: "📍",
                     },
                   ].map((stat) => (
                     <div
@@ -652,7 +713,8 @@ export default function Dashboard() {
                       <>
                         <div className="flex justify-between text-xs mb-2">
                           <span>
-                            Orders: {orders.length}/3
+                            Orders:{" "}
+                            {orders.length}/3
                           </span>
 
                           <span>
@@ -665,7 +727,9 @@ export default function Dashboard() {
                             className="h-full bg-gold rounded-full"
                             style={{
                               width: `${Math.min(
-                                (orders.length / 3) * 100,
+                                (orders.length /
+                                  3) *
+                                  100,
                                 100
                               )}%`,
                             }}
@@ -679,7 +743,8 @@ export default function Dashboard() {
                         <>
                           <div className="flex justify-between text-xs mb-2">
                             <span>
-                              Orders: {orders.length}/6
+                              Orders:{" "}
+                              {orders.length}/6
                             </span>
 
                             <span>
@@ -692,7 +757,9 @@ export default function Dashboard() {
                               className="h-full bg-gold rounded-full"
                               style={{
                                 width: `${Math.min(
-                                  (orders.length / 6) * 100,
+                                  (orders.length /
+                                    6) *
+                                    100,
                                   100
                                 )}%`,
                               }}
@@ -706,7 +773,8 @@ export default function Dashboard() {
                         <>
                           <div className="flex justify-between text-xs mb-2">
                             <span>
-                              Orders: {orders.length}/10
+                              Orders:{" "}
+                              {orders.length}/10
                             </span>
 
                             <span>
@@ -719,7 +787,9 @@ export default function Dashboard() {
                               className="h-full bg-gold rounded-full"
                               style={{
                                 width: `${Math.min(
-                                  (orders.length / 10) * 100,
+                                  (orders.length /
+                                    10) *
+                                    100,
                                   100
                                 )}%`,
                               }}
@@ -730,7 +800,7 @@ export default function Dashboard() {
 
                     {orders.length >= 10 && (
                       <div className="text-sm text-gold font-medium">
-                        ðŸŽ‰ You have reached the highest StyleHub membership level.
+                        🎉 You have reached the highest StyleHub membership level.
                       </div>
                     )}
 
@@ -751,7 +821,7 @@ export default function Dashboard() {
                     <div className="text-center py-8">
 
                       <div className="text-4xl mb-3">
-                        ðŸ“¦
+                        📦
                       </div>
 
                       <p className="text-sm text-charcoal-400">
@@ -781,24 +851,26 @@ export default function Dashboard() {
                           >
 
                             <div>
+
                               <p className="text-sm font-medium text-charcoal">
                                 {order.id}
                               </p>
 
                               <p className="text-xs text-charcoal-400">
-                                {order.date} Â·{" "}
+                                {order.date} ·{" "}
                                 {order.items}{" "}
                                 item
                                 {order.items > 1
                                   ? "s"
                                   : ""}
                               </p>
+
                             </div>
 
                             <div className="flex items-center gap-3">
 
                               <span className="font-semibold text-sm text-charcoal">
-                                â‚¹
+                                ₹
                                 {order.total.toLocaleString(
                                   "en-IN"
                                 )}
@@ -828,10 +900,12 @@ export default function Dashboard() {
                   {orders.length > 0 && (
                     <button
                       type="button"
-                      onClick={() => setTab("orders")}
+                      onClick={() =>
+                        setTab("orders")
+                      }
                       className="text-sm text-gold hover:underline mt-4 block"
                     >
-                      View all orders â†’
+                      View all orders →
                     </button>
                   )}
 
@@ -840,9 +914,9 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* =====================================================
+            {/* =================================================
                 ORDERS
-            ===================================================== */}
+            ================================================= */}
 
             {tab === "orders" && (
               <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -864,7 +938,7 @@ export default function Dashboard() {
                   <div className="p-12 text-center">
 
                     <div className="text-5xl mb-4">
-                      ðŸ“¦
+                      📦
                     </div>
 
                     <h3 className="font-semibold text-lg text-charcoal">
@@ -919,7 +993,7 @@ export default function Dashboard() {
                             </div>
 
                             <p className="text-xs text-charcoal-400">
-                              {order.date} Â·{" "}
+                              {order.date} ·{" "}
                               {order.items}{" "}
                               item
                               {order.items > 1
@@ -932,7 +1006,7 @@ export default function Dashboard() {
                           <div className="text-right">
 
                             <p className="font-bold text-charcoal">
-                              â‚¹
+                              ₹
                               {order.total.toLocaleString(
                                 "en-IN"
                               )}
@@ -942,28 +1016,34 @@ export default function Dashboard() {
 
                               {order.products
                                 .slice(0, 3)
-                                .map((productId) => {
+                                .map(
+                                  (productId) => {
 
-                                  const product =
-                                    products.find(
-                                      (p) =>
-                                        p.id ===
-                                        productId
+                                    const product =
+                                      products.find(
+                                        (p) =>
+                                          p.id ===
+                                          productId
+                                      );
+
+                                    if (!product) {
+                                      return null;
+                                    }
+
+                                    return (
+                                      <img
+                                        key={
+                                          productId
+                                        }
+                                        src={`${product.image}?w=60&h=70&fit=crop&auto=format`}
+                                        alt={
+                                          product.name
+                                        }
+                                        className="w-10 h-12 rounded-lg object-cover bg-charcoal-50"
+                                      />
                                     );
-
-                                  if (!product) {
-                                    return null;
                                   }
-
-                                  return (
-                                    <img
-                                      key={productId}
-                                      src={`${product.image}?w=60&h=70&fit=crop&auto=format`}
-                                      alt={product.name}
-                                      className="w-10 h-12 rounded-lg object-cover bg-charcoal-50"
-                                    />
-                                  );
-                                })}
+                                )}
 
                             </div>
 
@@ -1003,23 +1083,26 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* =====================================================
+            {/* =================================================
                 WISHLIST
-            ===================================================== */}
+            ================================================= */}
 
             {tab === "wishlist" && (
               <div>
 
                 <h2 className="font-display text-2xl font-bold text-charcoal mb-6">
-                  My Wishlist ({wishlistProducts.length})
+                  My Wishlist (
+                  {wishlistProducts.length}
+                  )
                 </h2>
 
-                {wishlistProducts.length === 0 ? (
+                {wishlistProducts.length ===
+                0 ? (
 
                   <div className="bg-white rounded-2xl p-12 shadow-sm text-center">
 
                     <p className="text-4xl mb-4">
-                      â™¡
+                      ♡
                     </p>
 
                     <p className="text-charcoal-400 text-sm mb-4">
@@ -1069,7 +1152,7 @@ export default function Dashboard() {
                             </p>
 
                             <p className="text-sm font-bold text-charcoal mt-1">
-                              â‚¹
+                              ₹
                               {product.price.toLocaleString(
                                 "en-IN"
                               )}
@@ -1089,9 +1172,9 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* =====================================================
+            {/* =================================================
                 ADDRESSES
-            ===================================================== */}
+            ================================================= */}
 
             {tab === "addresses" && (
               <div>
@@ -1100,12 +1183,14 @@ export default function Dashboard() {
                   Saved Addresses
                 </h2>
 
-                {Object.keys(savedAddresses).length === 0 ? (
+                {Object.keys(
+                  savedAddresses
+                ).length === 0 ? (
 
                   <div className="bg-white rounded-2xl p-12 shadow-sm text-center">
 
                     <div className="text-5xl mb-4">
-                      ðŸ“
+                      📍
                     </div>
 
                     <h3 className="font-semibold text-lg text-charcoal">
@@ -1148,7 +1233,9 @@ export default function Dashboard() {
                             <button
                               type="button"
                               onClick={() =>
-                                removeAddress(type)
+                                removeAddress(
+                                  type
+                                )
                               }
                               className="text-xs text-red-500 hover:text-red-700 transition-colors"
                             >
@@ -1190,9 +1277,9 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* =====================================================
+            {/* =================================================
                 PROFILE
-            ===================================================== */}
+            ================================================= */}
 
             {tab === "profile" && (
               <div className="space-y-6">
