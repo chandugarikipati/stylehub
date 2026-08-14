@@ -12,8 +12,10 @@ import {
 
 import { useApp } from "../context/AppContext";
 
-const GOOGLE_CLIENT_ID = import.meta.env
-  .VITE_GOOGLE_CLIENT_ID as string | undefined;
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID as
+    | string
+    | undefined;
 
 type GoogleCredentialResponse = {
   credential: string;
@@ -90,6 +92,10 @@ export default function Login() {
 
   const [error, setError] =
     useState("");
+
+  // =====================================================
+  // GOOGLE LOGIN
+  // =====================================================
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) {
@@ -248,6 +254,10 @@ export default function Login() {
     };
   }, [googleLogin, navigate]);
 
+  // =====================================================
+  // EMAIL LOGIN
+  // =====================================================
+
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement>
   ) => {
@@ -286,6 +296,7 @@ export default function Login() {
         return;
       }
 
+      // Go to HOME after successful login
       navigate("/");
     } catch (err: unknown) {
       console.error(
@@ -303,12 +314,73 @@ export default function Login() {
     }
   };
 
+  // =====================================================
+  // EYE ICONS
+  // =====================================================
+
+  const EyeIcon = () => {
+    if (showPassword) {
+      // Eye with slash = password currently visible
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-5 h-5"
+          aria-hidden="true"
+        >
+          <path d="M3 3l18 18" />
+
+          <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+
+          <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5.2 0 8.7 4 10 8-0.4 1.3-1.2 2.6-2.2 3.7" />
+
+          <path d="M6.2 6.2C4.5 7.4 3.3 9.1 2 12c1.3 4 4.8 8 10 8 1.7 0 3.2-.4 4.5-1" />
+        </svg>
+      );
+    }
+
+    // Normal eye = password hidden
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-5 h-5"
+        aria-hidden="true"
+      >
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+
+        <circle
+          cx="12"
+          cy="12"
+          r="3"
+        />
+      </svg>
+    );
+  };
+
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
 
         {/* LOGO */}
+
         <div className="text-center mb-8">
+
           <Link
             to="/"
             className="text-3xl font-bold text-charcoal"
@@ -323,19 +395,25 @@ export default function Login() {
           <p className="text-gray-500 mt-2">
             Login to your StyleHub account
           </p>
+
         </div>
 
         {/* ERROR */}
+
         {error && (
           <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+
             <p className="text-sm font-medium text-red-600">
               {error}
             </p>
+
           </div>
         )}
 
         {/* GOOGLE LOGIN */}
+
         <div className="flex justify-center min-h-[44px]">
+
           {GOOGLE_CLIENT_ID ? (
             <div
               ref={googleButtonRef}
@@ -347,6 +425,7 @@ export default function Login() {
               Check your frontend .env file.
             </p>
           )}
+
         </div>
 
         {googleLoading && (
@@ -356,7 +435,9 @@ export default function Login() {
         )}
 
         {/* DIVIDER */}
+
         <div className="flex items-center gap-4 my-6">
+
           <div className="h-px bg-gray-200 flex-1" />
 
           <span className="text-xs text-gray-400 font-medium whitespace-nowrap">
@@ -364,16 +445,20 @@ export default function Login() {
           </span>
 
           <div className="h-px bg-gray-200 flex-1" />
+
         </div>
 
         {/* EMAIL LOGIN */}
+
         <form
           onSubmit={handleSubmit}
           className="space-y-5"
         >
 
           {/* EMAIL */}
+
           <div>
+
             <label className="block text-sm font-medium mb-2">
               Email
             </label>
@@ -392,15 +477,19 @@ export default function Login() {
               autoComplete="email"
               className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-black transition"
             />
+
           </div>
 
           {/* PASSWORD */}
+
           <div>
+
             <label className="block text-sm font-medium mb-2">
               Password
             </label>
 
             <div className="relative">
+
               <input
                 type={
                   showPassword
@@ -420,6 +509,8 @@ export default function Login() {
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 pr-14 outline-none focus:border-black transition"
               />
 
+              {/* PASSWORD VISIBILITY BUTTON */}
+
               <button
                 type="button"
                 onClick={() =>
@@ -428,21 +519,27 @@ export default function Login() {
                       !previous
                   )
                 }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black px-2 py-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black px-2 py-1 transition-colors"
                 aria-label={
                   showPassword
                     ? "Hide password"
                     : "Show password"
                 }
+                title={
+                  showPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
               >
-                {showPassword
-                  ? "ðŸ™ˆ"
-                  : "ðŸ‘ï¸"}
+                <EyeIcon />
               </button>
+
             </div>
+
           </div>
 
           {/* LOGIN BUTTON */}
+
           <button
             type="submit"
             disabled={
@@ -455,10 +552,13 @@ export default function Login() {
               ? "Logging in..."
               : "Login"}
           </button>
+
         </form>
 
         {/* REGISTER */}
+
         <p className="text-center text-sm text-gray-500 mt-6">
+
           Don't have an account?{" "}
 
           <Link
@@ -467,9 +567,11 @@ export default function Login() {
           >
             Create Account
           </Link>
+
         </p>
 
       </div>
+
     </div>
   );
 }
