@@ -1,4 +1,4 @@
-import {
+﻿import {
   Link,
   useNavigate,
 } from "react-router-dom";
@@ -64,12 +64,13 @@ export default function Checkout() {
     useNavigate();
 
   const {
-    cartItems,
-    cartTotal,
-    clearCart,
-    user,
-    showToast,
-  } = useApp();
+  cartItems,
+  cartTotal,
+  clearCart,
+  createOrder,
+  user,
+  showToast,
+} = useApp();
 
   // ===================================================
   // PAYMENT
@@ -182,12 +183,12 @@ export default function Checkout() {
 
     if (user?.id) {
       console.log(
-        "✅ Checkout has MongoDB user ID:",
+        "âœ… Checkout has MongoDB user ID:",
         user.id
       );
     } else {
       console.log(
-        "❌ Checkout has NO user ID"
+        "âŒ Checkout has NO user ID"
       );
     }
   }, [user]);
@@ -225,7 +226,7 @@ export default function Checkout() {
       async () => {
         if (!user?.id) {
           console.log(
-            "❌ No logged-in user ID available."
+            "âŒ No logged-in user ID available."
           );
 
           setSavedAddresses(
@@ -872,12 +873,12 @@ export default function Checkout() {
         );
 
         console.log(
-          "✅ ADDRESS SAVED SUCCESSFULLY"
+          "âœ… ADDRESS SAVED SUCCESSFULLY"
         );
 
       } catch (error) {
         console.error(
-          "❌ SAVE ADDRESS ERROR:",
+          "âŒ SAVE ADDRESS ERROR:",
           error
         );
 
@@ -982,11 +983,21 @@ export default function Checkout() {
           false
         );
 
+        const order = createOrder();
+
+        if (!order) {
+          showToast(
+            "Unable to create your order. Please try again.",
+            "error"
+          );
+
+          setPlacingOrder(false);
+          return;
+        }
+
         setOrderPlaced(
           true
         );
-
-        clearCart();
 
         showToast(
           "Order placed successfully!",
@@ -1005,7 +1016,7 @@ export default function Checkout() {
         <div className="text-center max-w-md">
 
           <div className="w-20 h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-4xl mx-auto mb-6">
-            ✓
+            âœ“
           </div>
 
           <h1 className="font-display text-3xl font-semibold">
@@ -1181,7 +1192,7 @@ export default function Checkout() {
               <div>
 
                 <h2 className="font-display text-xl font-semibold">
-                  📍 Delivery Location
+                  ðŸ“ Delivery Location
                 </h2>
 
                 <p className="text-sm text-charcoal-400 mt-1">
@@ -1201,8 +1212,8 @@ export default function Checkout() {
                 className="bg-charcoal text-white rounded-xl px-5 py-3 text-sm font-semibold hover:bg-gold hover:text-charcoal transition disabled:opacity-60"
               >
                 {gettingLocation
-                  ? "⏳ Detecting..."
-                  : "📍 Use My Location"}
+                  ? "â³ Detecting..."
+                  : "ðŸ“ Use My Location"}
               </button>
 
             </div>
@@ -1306,7 +1317,7 @@ export default function Checkout() {
 
                     <div>
                       <div className="text-5xl mb-3">
-                        🗺️
+                        ðŸ—ºï¸
                       </div>
 
                       <p className="font-semibold">
@@ -1326,7 +1337,7 @@ export default function Checkout() {
 
               {currentLocation && (
                 <div className="mt-3 bg-green-50 border border-green-100 text-green-700 rounded-xl px-4 py-3">
-                  ✓ Current location detected
+                  âœ“ Current location detected
                   <div className="text-xs mt-1">
                     {currentLocation.latitude.toFixed(
                       5
@@ -1481,8 +1492,8 @@ export default function Checkout() {
                 className="w-full flex items-center justify-center gap-2 bg-charcoal text-white rounded-xl px-4 py-3 font-semibold hover:bg-gold hover:text-charcoal transition disabled:opacity-60"
               >
                 {savingAddress
-                  ? "⏳ Saving Address..."
-                  : `💾 Save ${addressType} Address`}
+                  ? "â³ Saving Address..."
+                  : `ðŸ’¾ Save ${addressType} Address`}
               </button>
 
               {/* GOOGLE MAPS */}
@@ -1494,7 +1505,7 @@ export default function Checkout() {
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 border border-charcoal-200 rounded-xl px-4 py-3 font-medium hover:bg-charcoal hover:text-white transition"
               >
-                🗺️ Open Location in Google Maps
+                ðŸ—ºï¸ Open Location in Google Maps
               </a>
 
             </div>
@@ -1630,7 +1641,7 @@ export default function Checkout() {
                   </div>
 
                   <span className="text-sm font-semibold">
-                    ₹
+                    â‚¹
                     {(
                       Number(
                         item.product
@@ -1659,7 +1670,7 @@ export default function Checkout() {
               </span>
 
               <span>
-                ₹
+                â‚¹
                 {cartTotal.toLocaleString(
                   "en-IN"
                 )}
@@ -1677,7 +1688,7 @@ export default function Checkout() {
                 {shipping ===
                 0
                   ? "FREE"
-                  : `₹${shipping}`}
+                  : `â‚¹${shipping}`}
               </span>
 
             </div>
@@ -1689,7 +1700,7 @@ export default function Checkout() {
               </span>
 
               <span>
-                ₹
+                â‚¹
                 {total.toLocaleString(
                   "en-IN"
                 )}
@@ -1715,7 +1726,7 @@ export default function Checkout() {
             to="/cart"
             className="block text-center text-sm text-charcoal-500 hover:text-charcoal mt-5"
           >
-            ← Back to Cart
+            â† Back to Cart
           </Link>
 
         </div>

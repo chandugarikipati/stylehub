@@ -1,4 +1,4 @@
-import {
+﻿import {
   useEffect,
   useRef,
   useState,
@@ -145,7 +145,7 @@ export default function Login() {
                 );
 
               if (success) {
-                navigate("/dashboard");
+                navigate("/");
               } else {
                 setError(
                   "Google login failed. Please try again."
@@ -286,7 +286,7 @@ export default function Login() {
         return;
       }
 
-      navigate("/dashboard");
+      navigate("/");
     } catch (err: unknown) {
       console.error(
         "Login failed:",
@@ -436,8 +436,8 @@ export default function Login() {
                 }
               >
                 {showPassword
-                  ? "🙈"
-                  : "👁️"}
+                  ? "ðŸ™ˆ"
+                  : "ðŸ‘ï¸"}
               </button>
             </div>
           </div>

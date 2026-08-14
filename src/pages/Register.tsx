@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
@@ -109,7 +109,7 @@ export default function Register() {
                 "success"
               );
 
-              navigate("/dashboard");
+              navigate("/");
             } else {
               setError(
                 "Google account creation/login failed. Please try again."
@@ -330,7 +330,7 @@ export default function Register() {
         );
 
       if (loggedIn) {
-        navigate("/dashboard");
+        navigate("/");
       } else {
         navigate("/login");
       }
@@ -392,7 +392,7 @@ export default function Register() {
                   className="flex items-center gap-3"
                 >
                   <span className="text-gold text-lg">
-                    ✓
+                    âœ“
                   </span>
 
                   <span className="text-white/80 text-sm">

@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { products } from "../data/products";
-import { getOrders, type Order } from "../utils/orderStorage";
 
 type Tab =
   | "overview"
@@ -119,13 +118,12 @@ export default function Dashboard() {
     logout,
     wishlistIds,
     cartItems,
+    orders,
   } = useApp();
 
   const navigate = useNavigate();
 
   const [tab, setTab] = useState<Tab>("overview");
-
-  const [orders, setOrders] = useState<Order[]>([]);
 
   const [savedAddresses, setSavedAddresses] =
     useState<SavedAddresses>({});
@@ -133,13 +131,6 @@ export default function Dashboard() {
   const [membership, setMembership] =
     useState<MembershipData | null>(null);
 
-  // =====================================================
-  // LOAD ORDERS
-  // =====================================================
-
-  useEffect(() => {
-    setOrders(getOrders());
-  }, []);
 
   // =====================================================
   // LOAD SAVED ADDRESSES FROM MONGODB
@@ -438,27 +429,27 @@ export default function Dashboard() {
     {
       id: "overview",
       label: "Overview",
-      icon: "⊞",
+      icon: "âŠž",
     },
     {
       id: "orders",
       label: "Orders",
-      icon: "📦",
+      icon: "ðŸ“¦",
     },
     {
       id: "wishlist",
       label: "Wishlist",
-      icon: "♡",
+      icon: "â™¡",
     },
     {
       id: "addresses",
       label: "Addresses",
-      icon: "📍",
+      icon: "ðŸ“",
     },
     {
       id: "profile",
       label: "Profile",
-      icon: "👤",
+      icon: "ðŸ‘¤",
     },
   ];
 
@@ -526,7 +517,7 @@ export default function Dashboard() {
                 }}
                 className="flex items-center gap-3 w-full px-5 py-3.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-l-2 border-transparent"
               >
-                <span>→</span>
+                <span>â†’</span>
                 Sign Out
               </button>
 
@@ -549,7 +540,7 @@ export default function Dashboard() {
 
                 <h2 className="font-display text-2xl font-bold text-charcoal">
                   Hello,{" "}
-                  {user.name.split(" ")[0]} 👋
+                  {user.name.split(" ")[0]} ðŸ‘‹
                 </h2>
 
                 {/* STAT CARDS */}
@@ -560,12 +551,12 @@ export default function Dashboard() {
                     {
                       label: "Total Orders",
                       value: orders.length,
-                      icon: "📦",
+                      icon: "ðŸ“¦",
                     },
                     {
                       label: "Wishlist Items",
                       value: wishlistIds.length,
-                      icon: "♡",
+                      icon: "â™¡",
                     },
                     {
                       label: "Cart Items",
@@ -574,7 +565,7 @@ export default function Dashboard() {
                           sum + item.qty,
                         0
                       ),
-                      icon: "🛒",
+                      icon: "ðŸ›’",
                     },
                     {
                       label: "Saved Addresses",
@@ -582,7 +573,7 @@ export default function Dashboard() {
                         Object.keys(
                           savedAddresses
                         ).length,
-                      icon: "📍",
+                      icon: "ðŸ“",
                     },
                   ].map((stat) => (
                     <div
@@ -739,7 +730,7 @@ export default function Dashboard() {
 
                     {orders.length >= 10 && (
                       <div className="text-sm text-gold font-medium">
-                        🎉 You have reached the highest StyleHub membership level.
+                        ðŸŽ‰ You have reached the highest StyleHub membership level.
                       </div>
                     )}
 
@@ -760,7 +751,7 @@ export default function Dashboard() {
                     <div className="text-center py-8">
 
                       <div className="text-4xl mb-3">
-                        📦
+                        ðŸ“¦
                       </div>
 
                       <p className="text-sm text-charcoal-400">
@@ -795,7 +786,7 @@ export default function Dashboard() {
                               </p>
 
                               <p className="text-xs text-charcoal-400">
-                                {order.date} ·{" "}
+                                {order.date} Â·{" "}
                                 {order.items}{" "}
                                 item
                                 {order.items > 1
@@ -807,7 +798,7 @@ export default function Dashboard() {
                             <div className="flex items-center gap-3">
 
                               <span className="font-semibold text-sm text-charcoal">
-                                ₹
+                                â‚¹
                                 {order.total.toLocaleString(
                                   "en-IN"
                                 )}
@@ -840,7 +831,7 @@ export default function Dashboard() {
                       onClick={() => setTab("orders")}
                       className="text-sm text-gold hover:underline mt-4 block"
                     >
-                      View all orders →
+                      View all orders â†’
                     </button>
                   )}
 
@@ -873,7 +864,7 @@ export default function Dashboard() {
                   <div className="p-12 text-center">
 
                     <div className="text-5xl mb-4">
-                      📦
+                      ðŸ“¦
                     </div>
 
                     <h3 className="font-semibold text-lg text-charcoal">
@@ -928,7 +919,7 @@ export default function Dashboard() {
                             </div>
 
                             <p className="text-xs text-charcoal-400">
-                              {order.date} ·{" "}
+                              {order.date} Â·{" "}
                               {order.items}{" "}
                               item
                               {order.items > 1
@@ -941,7 +932,7 @@ export default function Dashboard() {
                           <div className="text-right">
 
                             <p className="font-bold text-charcoal">
-                              ₹
+                              â‚¹
                               {order.total.toLocaleString(
                                 "en-IN"
                               )}
@@ -1028,7 +1019,7 @@ export default function Dashboard() {
                   <div className="bg-white rounded-2xl p-12 shadow-sm text-center">
 
                     <p className="text-4xl mb-4">
-                      ♡
+                      â™¡
                     </p>
 
                     <p className="text-charcoal-400 text-sm mb-4">
@@ -1078,7 +1069,7 @@ export default function Dashboard() {
                             </p>
 
                             <p className="text-sm font-bold text-charcoal mt-1">
-                              ₹
+                              â‚¹
                               {product.price.toLocaleString(
                                 "en-IN"
                               )}
@@ -1114,7 +1105,7 @@ export default function Dashboard() {
                   <div className="bg-white rounded-2xl p-12 shadow-sm text-center">
 
                     <div className="text-5xl mb-4">
-                      📍
+                      ðŸ“
                     </div>
 
                     <h3 className="font-semibold text-lg text-charcoal">
